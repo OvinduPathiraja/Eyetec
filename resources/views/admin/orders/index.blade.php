@@ -1,4 +1,6 @@
-<x-app-layout>
+@extends('layouts.admin')
+
+@section('content')
 <div class="max-w-7xl mx-auto py-10 px-4">
 
     {{-- PAGE TITLE --}}
@@ -53,8 +55,7 @@
                         <span class="px-2 py-1 rounded text-xs font-semibold text-white
                             {{ $order->status === 'paid' ? 'bg-green-600' : '' }}
                             {{ $order->status === 'pending' ? 'bg-yellow-500' : '' }}
-                            {{ $order->status === 'cancelled' ? 'bg-gray-500' : '' }}
-                        ">
+                            {{ $order->status === 'cancelled' ? 'bg-gray-500' : '' }}">
                             {{ ucfirst($order->status) }}
                         </span>
                     </td>
@@ -65,7 +66,7 @@
 
                     <td class="p-3">
                         <form method="POST"
-                              action="{{ route('admin.orders.status', $order->id) }}"
+                              action="{{ route('admin.orders.status', $order) }}"
                               class="flex items-center gap-2">
                             @csrf
                             @method('PATCH')
@@ -125,4 +126,4 @@
     </div>
 
 </div>
-</x-app-layout>
+@endsection

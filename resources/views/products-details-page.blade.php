@@ -54,16 +54,23 @@
                 {{ $product->description }}
             </p>
 
-            {{-- ADD TO CART --}}
-            <form method="POST" action="{{ route('cart.add', $product->id) }}">
+            <form method="POST" action="{{ route('cart.add', $product->id) }}" class="space-y-3">
                 @csrf
-                <button
-                    {{ $product->stock <= 0 ? 'disabled' : '' }}
-                    class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg
-                           font-semibold w-fit disabled:opacity-50">
+
+                <label class="block text-sm font-semibold">Quantity</label>
+                <input type="number"
+                    name="quantity"
+                    min="1"
+                    max="{{ $product->stock }}"
+                    value="1"
+                    class="border rounded px-3 py-2 w-24"
+                    required>
+
+                <button class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700">
                     Add to Cart
                 </button>
             </form>
+
 
         </div>
     </div>
@@ -86,7 +93,7 @@
                         class="w-[120px] h-[120px] object-contain"
                         width="120"
                         height="120"
-                    />
+                    /> 
                 </div>
 
                 <h3 class="text-sm font-semibold mb-1">

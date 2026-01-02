@@ -22,7 +22,7 @@
             <select name="brand" class="w-full border rounded-lg px-3 py-2">
                 <option value="">All Brands</option>
                 @foreach($brands as $brand)
-                    <option value="{{ $brand }}" @selected(request('brand')==$brand)>
+                    <option value="{{ $brand }}" @selected(request('brand') == $brand)>
                         {{ $brand }}
                     </option>
                 @endforeach
@@ -35,7 +35,7 @@
             <select name="category" class="w-full border rounded-lg px-3 py-2">
                 <option value="">All Categories</option>
                 @foreach($categories as $category)
-                    <option value="{{ $category }}" @selected(request('category')==$category)>
+                    <option value="{{ $category }}" @selected(request('category') == $category)>
                         {{ $category }}
                     </option>
                 @endforeach
@@ -47,10 +47,10 @@
             <label class="text-xs text-gray-500 mb-1 block">Sort</label>
             <select name="sort" class="w-full border rounded-lg px-3 py-2">
                 <option value="">Newest</option>
-                <option value="low_high" @selected(request('sort')=='low_high')>
+                <option value="low_high" @selected(request('sort') == 'low_high')>
                     Price: Low → High
                 </option>
-                <option value="high_low" @selected(request('sort')=='high_low')>
+                <option value="high_low" @selected(request('sort') == 'high_low')>
                     Price: High → Low
                 </option>
             </select>
@@ -69,64 +69,59 @@
     </form>
 
     {{-- PRODUCTS GRID --}}
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
-@foreach($products as $product)
-<div class="bg-white rounded-xl shadow hover:shadow-lg transition
-            flex flex-col max-w-full">
+        @forelse($products as $product)
+            <div class="bg-white rounded-xl shadow hover:shadow-lg transition flex flex-col">
 
-    {{-- IMAGE --}}
-    <div class="bg-gray-100 h-[220px] flex items-center justify-center relative">
-        <img
-            src="{{ $product->image && file_exists(public_path($product->image))
-                ? asset($product->image)
-                : asset('images/placeholder.png') }}"
-            class="w-[180px] h-[180px] object-contain"
-            width="180"
-            height="180"
-            loading="lazy"
-            alt="{{ $product->product_name }}"
-        />
+                {{-- IMAGE --}}
+                <div class="bg-gray-100 h-[220px] flex items-center justify-center relative">
+                    <img
+                        src="{{ $product->image && file_exists(public_path($product->image))
+                            ? asset($product->image)
+                            : asset('images/placeholder.png') }}"
+                        class="w-[180px] h-[180px] object-contain"
+                        alt="{{ $product->product_name }}"
+                        loading="lazy"
+                    >
 
-        {{-- STOCK --}}
-        <span class="absolute top-2 right-2 text-xs px-2 py-1 rounded
-            {{ $product->stock > 0 ? 'bg-green-600' : 'bg-gray-400' }} text-white">
-            {{ $product->stock > 0 ? 'In Stock' : 'Out of Stock' }}
-        </span>
+                    {{-- STOCK --}}
+                    <span class="absolute top-2 right-2 text-xs px-2 py-1 rounded
+                        {{ $product->stock > 0 ? 'bg-green-600' : 'bg-gray-400' }} text-white">
+                        {{ $product->stock > 0 ? 'In Stock' : 'Out of Stock' }}
+                    </span>
+                </div>
+
+                {{-- CONTENT --}}
+                <div class="p-4 flex flex-col flex-1">
+                    <h3 class="font-semibold text-sm mb-1">
+                        {{ $product->product_name }}
+                    </h3>
+
+                    <p class="text-xs text-gray-500 mb-4 line-clamp-2">
+                        {{ $product->description }}
+                    </p>
+
+                    <div class="mt-auto flex justify-between items-center">
+                        <span class="font-bold text-red-600">
+                            LKR {{ number_format($product->price, 2) }}
+                        </span>
+
+                        <a href="{{ route('products.details', $product->id) }}"
+                           class="bg-red-600 text-white px-3 py-1 rounded text-xs hover:bg-red-700">
+                            View
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        @empty
+            <p class="col-span-full text-center text-gray-500">
+                No products found.
+            </p>
+        @endforelse
+
     </div>
-
-    {{-- CONTENT --}}
-    <div class="p-4 flex flex-col flex-1">
-        <h3 class="font-semibold text-sm mb-1">
-            {{ $product->product_name }}
-        </h3>
-
-        <p class="text-xs text-gray-500 mb-4 line-clamp-2">
-            {{ $product->description }}
-        </p>
-
-        <div class="mt-auto flex justify-between items-center">
-            <span class="font-bold text-red-600">
-                LKR {{ number_format($product->price,2) }}
-            </span>
-
-            <form method="POST" action="{{ route('cart.add', $product->id) }}">
-                @csrf
-                <button
-                    {{ $product->stock <= 0 ? 'disabled' : '' }}
-                    class="bg-red-600 text-white px-3 py-1 rounded text-xs
-                           disabled:opacity-50">
-                    Add to Cart
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-@endforeach
-
-
-</div>
-
 
     {{-- PAGINATION --}}
     <div class="mt-12">

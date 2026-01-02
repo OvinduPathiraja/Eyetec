@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    /**
+     * Show all orders (Admin)
+     */
     public function index()
     {
         $orders = Order::with(['user', 'items.product'])
@@ -17,20 +20,28 @@ class OrderController extends Controller
         return view('admin.orders.index', compact('orders'));
     }
 
+    /**
+     * Update order status
+     */
     public function updateStatus(Request $request, Order $order)
     {
         $request->validate([
             'status' => 'required|in:pending,paid,cancelled',
         ]);
 
+        // Restore stock if cancelled
         if ($order->status !== 'cancelled' && $request->status === 'cancelled') {
             foreach ($order->items as $item) {
-                $item->product->increment('stock', $item->quantity);
+                if ($item->product) {
+                    $item->product->increment('stock', $item->quantity);
+                }
             }
         }
 
-        $order->update(['status' => $request->status]);
+        $order->update([
+            'status' => $request->status,
+        ]);
 
-        return back()->with('success', 'Order status updated');
+        return back()->with('success', 'Order status updated successfully');
     }
 }

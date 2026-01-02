@@ -40,18 +40,19 @@
                     @endphp
 
                     <tr class="border-t hover:bg-gray-50">
+
                         {{-- PRODUCT --}}
                         <td class="p-4 flex items-center gap-4">
                             <img
-                                src="{{ $item->product && $item->product->image
-                                        ? asset('storage/'.$item->product->image)
-                                        : asset('images/placeholder.png') }}"
+                                src="{{ $item->product && $item->product->image && file_exists(public_path($item->product->image))
+                                    ? asset($item->product->image)
+                                    : asset('images/placeholder.png') }}"
                                 class="w-16 h-16 object-cover rounded"
                                 alt="Product image">
 
                             <div>
                                 <p class="font-semibold">
-                                    {{ $item->product->name ?? 'Product removed' }}
+                                    {{ $item->product->product_name ?? 'Product removed' }}
                                 </p>
                             </div>
                         </td>
@@ -71,6 +72,7 @@
                                 <input type="number"
                                        name="quantity"
                                        min="1"
+                                       max="{{ $item->product->stock ?? 1 }}"
                                        value="{{ $item->quantity }}"
                                        class="w-20 border rounded px-2 py-1"
                                        onchange="this.form.submit()">
@@ -95,6 +97,7 @@
                                 </button>
                             </form>
                         </td>
+
                     </tr>
                 @endforeach
             </tbody>

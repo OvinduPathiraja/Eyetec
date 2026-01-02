@@ -21,35 +21,40 @@ class CartController extends Controller
         return view('cart.index', compact('cart'));
     }
 
-    // Add product to cart
-    public function add(Product $product)
-    {
-        // Optional stock protection
-        if ($product->stock <= 0) {
-            return back()->with('error', 'Product is out of stock');
+    public function add(Request $request, Product $product)
+{
+    $request->validate([
+        'quantity' => 'required|integer|min:1|max:' . $product->stock,
+    ]);
+
+    $cart = Cart::firstOrCreate([
+        'user_id' => auth()->id(),
+        'status'  => 'active',
+    ]);
+
+    $item = $cart->items()->where('product_id', $product->id)->first();
+
+    if ($item) {
+        $newQty = $item->quantity + $request->quantity;
+
+        if ($newQty > $product->stock) {
+            return back()->with('error', 'Not enough stock available');
         }
 
-        $cart = Cart::firstOrCreate(
-            ['user_id' => Auth::id(), 'status' => 'active']
-        );
-
-        $item = CartItem::where('cart_id', $cart->id)
-            ->where('product_id', $product->id)
-            ->first();
-
-        if ($item) {
-            $item->increment('quantity');
-        } else {
-            CartItem::create([
-                'cart_id'   => $cart->id,
-                'product_id'=> $product->id,
-                'quantity'  => 1,
-                'price'     => $product->price,
-            ]);
-        }
-
-        return back()->with('success', 'Product added to cart');
+        $item->update(['quantity' => $newQty]);
+    } else {
+        $cart->items()->create([
+            'product_id' => $product->id,
+            'price'      => $product->price,
+            'quantity'   => $request->quantity,
+        ]);
     }
+
+    return redirect()->route('cart.index')
+        ->with('success', 'Product added to cart');
+}
+
+
 
     // Update quantity
     public function update(Request $request, CartItem $item)

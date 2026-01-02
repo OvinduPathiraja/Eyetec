@@ -41,7 +41,7 @@
                         @foreach($order->items as $item)
                             <tr class="border-t">
                                 <td class="p-3">
-                                    {{ $item->product->name ?? 'Product removed' }}
+                                    {{ $item->product->product_name ?? 'Product removed' }}
                                 </td>
                                 <td class="p-3">
                                     LKR {{ number_format($item->price, 2) }}
