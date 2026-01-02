@@ -24,6 +24,6 @@ jobs:
           server: ftpupload.net
           username: if0_40807125
           password: BTLy9QQBABg2L
-          server-dir: /eyetec.rf.gd/htdocs/  # For addon domains
+          server-dir: /htdocs/  # For addon domains
           timeout: 86400000
           log-level: standard
