@@ -14,11 +14,23 @@
 
 <x-banner />
 
-<div class="min-h-screen">
+<div class="min-h-screen bg-gray-100">
 
-    @include('components.navigation')
+    {{-- ✅ JETSTREAM NAVIGATION (THIS IS CRITICAL) --}}
+    @livewire('navigation-menu')
 
-    <main class="py-8">
+    {{-- ✅ HEADER SLOT (Profile page uses this) --}}
+    @if (isset($header))
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                {{ $header }}
+            </div>
+        </header>
+    @endif
+
+    {{-- ✅ MAIN CONTENT --}}
+    <main>
+        {{ $slot ?? '' }}
         @yield('content')
     </main>
 

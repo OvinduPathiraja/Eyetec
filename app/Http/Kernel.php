@@ -4,18 +4,13 @@ namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
+
 class Kernel extends HttpKernel
 {
-    /**
-     * Global HTTP middleware stack.
-     */
     protected $middleware = [
         // default Laravel middleware
     ];
 
-    /**
-     * Middleware groups.
-     */
     protected $middlewareGroups = [
         'web' => [
             \App\Http\Middleware\EncryptCookies::class,
@@ -31,9 +26,6 @@ class Kernel extends HttpKernel
         ],
     ];
 
-    /**
-     * ✅ LARAVEL 12 WAY — Middleware Aliases
-     */
     protected $middlewareAliases = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,

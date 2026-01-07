@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 <div class="max-w-6xl mx-auto px-4 py-8">
     <h1 class="text-2xl font-bold mb-6">My Orders</h1>
@@ -9,15 +7,18 @@
     <?php else: ?>
         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="bg-white p-4 rounded shadow mb-4">
-                <p class="font-semibold">
-                    Order #<?php echo e($order->id); ?> — LKR <?php echo e(number_format($order->total,2)); ?>
+                <div class="flex justify-between items-center">
+                    <p class="font-semibold">
+                        Order #<?php echo e($order->id); ?> — LKR <?php echo e(number_format($order->total, 2)); ?>
 
-                </p>
+                    </p>
+                    <span class="text-xs px-2 py-1 rounded bg-gray-100 text-gray-700 capitalize"><?php echo e($order->status); ?></span>
+                </div>
 
-                <ul class="mt-2 text-sm text-gray-600">
+                <ul class="mt-2 text-sm text-gray-600 space-y-1">
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $order->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <li>
-                            <?php echo e($item->product?->name ?? 'Product removed'); ?>
+                            <?php echo e($item->product?->product_name ?? $item->product_name ?? 'Product removed'); ?>
 
                             × <?php echo e($item->quantity); ?>
 

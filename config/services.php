@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'mongo' => [
+    'url' => env('MONGO_API_URL'),
+    'key' => env('MONGO_API_KEY'),
+    'cluster' => env('MONGO_CLUSTER'),
+    'database' => env('MONGO_DATABASE'),
+],
+
+
 ];

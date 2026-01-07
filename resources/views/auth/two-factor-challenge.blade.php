@@ -1,8 +1,8 @@
 <x-guest-layout>
     <x-authentication-card>
-        <x-slot name="logo">
+        <!-- <x-slot name="logo">
             <x-authentication-card-logo />
-        </x-slot>
+        </x-slot> -->
 
         <div x-data="{ recovery: false }">
             <div class="mb-4 text-sm text-gray-600" x-show="! recovery">

@@ -29,6 +29,16 @@ class CheckoutController extends Controller
 
     public function place(Request $request)
     {
+        $request->validate([
+            'full_name'       => 'required|string|max:255',
+            'email'           => 'required|email|max:255',
+            'phone'           => 'required|string|max:30',
+            'country'         => 'required|string|max:100',
+            'address'         => 'required|string|max:500',
+            'payment_method'  => 'required|in:card,cod',
+            'notes'           => 'nullable|string|max:500',
+        ]);
+
         $cart = Cart::where('user_id', Auth::id())
             ->where('status', 'active')
             ->with('items.product')
@@ -60,10 +70,11 @@ class CheckoutController extends Controller
                 }
 
                 OrderItem::create([
-                    'order_id'   => $order->id,
-                    'product_id' => $item->product_id,
-                    'quantity'   => $item->quantity,
-                    'price'      => $item->product->price,
+                    'order_id'     => $order->id,
+                    'product_id'   => $item->product_id,
+                    'product_name' => $item->product->product_name ?? 'Product',
+                    'quantity'     => $item->quantity,
+                    'price'        => $item->product->price,
                 ]);
 
                 Product::where('id', $item->product_id)

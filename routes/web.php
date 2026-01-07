@@ -8,14 +8,13 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;               // USER ORDERS
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AuthRedirectController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 
-/*
-|--------------------------------------------------------------------------
-| PUBLIC ROUTES (GUEST + USER)
-|--------------------------------------------------------------------------
-*/
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Admin\BlogController as AdminBlogController;
+
 
 Route::get('/', [HomeController::class, 'index'])
     ->name('home');
@@ -26,16 +25,16 @@ Route::get('/products', [ProductController::class, 'products'])
 Route::get('/products/{product}', [ProductController::class, 'show'])
     ->name('products.details');
 
-/*
-|--------------------------------------------------------------------------
-| AUTHENTICATED USER ROUTES
-|--------------------------------------------------------------------------
-*/
+    Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
+    Route::get('/blogs/{id}', [BlogController::class, 'show'])
+    ->name('blogs.show');
+
 Route::middleware('auth')->group(function () {
 
-    /*
-    |---------------- CART ----------------
-    */
+    // Unified post-login redirect (role-aware)
+    Route::get('/redirect', AuthRedirectController::class)
+        ->name('auth.redirect');
+
     Route::get('/cart', [CartController::class, 'index'])
         ->name('cart.index');
 
@@ -48,9 +47,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/cart/remove/{item}', [CartController::class, 'remove'])
         ->name('cart.remove');
 
-    /*
-    |---------------- CHECKOUT ----------------
-    */
     Route::get('/checkout', [CheckoutController::class, 'index'])
         ->name('checkout.index');
 
@@ -64,7 +60,11 @@ Route::middleware('auth')->group(function () {
         ->name('orders.my');
 
     Route::get('/orders/success/{order}', function ($order) {
-        return view('orders.success', ['orderId' => $order]);
+        $order = \App\Models\Order::with('items.product')
+            ->where('user_id', auth()->id())
+            ->findOrFail($order);
+
+        return view('orders.success', compact('order'));
     })->name('orders.success');
 
     /*
@@ -123,5 +123,12 @@ Route::middleware(['auth', 'admin'])
         Route::patch('/orders/{order}/status',
             [AdminOrderController::class, 'updateStatus']
         )->name('orders.status');
+
+        Route::get('/blogs', [AdminBlogController::class, 'index'])->name('blogs.index');
+        Route::get('/blogs/create', [AdminBlogController::class, 'create'])->name('blogs.create');
+        Route::post('/blogs', [AdminBlogController::class, 'store'])->name('blogs.store');
+        Route::get('/blogs/{blog}/edit', [AdminBlogController::class, 'edit'])->name('blogs.edit');
+        Route::put('/blogs/{blog}', [AdminBlogController::class, 'update'])->name('blogs.update');
+        Route::delete('/blogs/{blog}', [AdminBlogController::class, 'destroy'])->name('blogs.destroy');
 
     });

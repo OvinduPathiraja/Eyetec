@@ -9,14 +9,17 @@
     @else
         @foreach($orders as $order)
             <div class="bg-white p-4 rounded shadow mb-4">
-                <p class="font-semibold">
-                    Order #{{ $order->id }} — LKR {{ number_format($order->total,2) }}
-                </p>
+                <div class="flex justify-between items-center">
+                    <p class="font-semibold">
+                        Order #{{ $order->id }} — LKR {{ number_format($order->total, 2) }}
+                    </p>
+                    <span class="text-xs px-2 py-1 rounded bg-gray-100 text-gray-700 capitalize">{{ $order->status }}</span>
+                </div>
 
-                <ul class="mt-2 text-sm text-gray-600">
+                <ul class="mt-2 text-sm text-gray-600 space-y-1">
                     @foreach($order->items as $item)
                         <li>
-                            {{ $item->product?->name ?? 'Product removed' }}
+                            {{ $item->product?->product_name ?? $item->product_name ?? 'Product removed' }}
                             × {{ $item->quantity }}
                         </li>
                     @endforeach

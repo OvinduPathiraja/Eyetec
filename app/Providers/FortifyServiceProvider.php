@@ -23,17 +23,26 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+
         Fortify::redirectUserForTwoFactorAuthenticationUsing(
             RedirectIfTwoFactorAuthenticatable::class
         );
 
+        // ✅ LOGIN RATE LIMITER
         RateLimiter::for('login', function (Request $request) {
             return Limit::perMinute(5)->by(
                 Str::lower($request->input(Fortify::username())) . '|' . $request->ip()
             );
         });
 
-        // ✅ ROLE-BASED LOGIN REDIRECT (FIX)
+        // ✅ TWO-FACTOR RATE LIMITER (THIS WAS MISSING)
+        RateLimiter::for('two-factor', function (Request $request) {
+            return Limit::perMinute(5)->by(
+                $request->session()->get('login.id') ?? $request->ip()
+            );
+        });
+
+        // ✅ ROLE-BASED REDIRECT
         $this->app->singleton(LoginResponse::class, function () {
             return new class implements LoginResponse {
                 public function toResponse($request)

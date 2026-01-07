@@ -9,9 +9,23 @@
         
         <div class="flex items-center gap-6 text-sm">
 
-            <a href="<?php echo e(route('products')); ?>" class="hover:text-red-600">
-                Products
-            </a>
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(auth()->check() && auth()->user()->role === 'admin'): ?>
+                <a href="<?php echo e(route('admin.dashboard')); ?>" class="hover:text-red-600">
+                    Dashboard
+                </a>
+
+                <a href="<?php echo e(route('admin.blogs.index')); ?>" class="hover:text-red-600">
+                    Manage Blogs
+                </a>
+            <?php else: ?>
+                <a href="<?php echo e(route('products')); ?>" class="hover:text-red-600">
+                    Products
+                </a>
+
+                <a href="<?php echo e(route('blogs.index')); ?>" class="hover:text-red-600">
+                    Blog
+                </a>
+            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(auth()->guard()->check()): ?>
                 <a href="<?php echo e(route('cart.index')); ?>" class="hover:text-red-600">
@@ -22,10 +36,14 @@
                     My Orders
                 </a>
 
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(auth()->user()->role === 'admin'): ?>
+                <?php if(auth()->user()->role === 'admin'): ?>
                     <a href="<?php echo e(route('admin.dashboard')); ?>"
                        class="text-red-600 font-semibold">
                         Admin
+                    </a>
+
+                    <a href="<?php echo e(route('admin.blogs.index')); ?>" class="hover:text-red-600">
+                        Manage Blogs
                     </a>
                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 

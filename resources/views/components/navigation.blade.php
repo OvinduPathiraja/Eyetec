@@ -9,9 +9,23 @@
         {{-- LINKS --}}
         <div class="flex items-center gap-6 text-sm">
 
-            <a href="{{ route('products') }}" class="hover:text-red-600">
-                Products
-            </a>
+            @if(auth()->check() && auth()->user()->role === 'admin')
+                <a href="{{ route('admin.dashboard') }}" class="hover:text-red-600">
+                    Dashboard
+                </a>
+
+                <a href="{{ route('admin.blogs.index') }}" class="hover:text-red-600">
+                    Manage Blogs
+                </a>
+            @else
+                <a href="{{ route('products') }}" class="hover:text-red-600">
+                    Products
+                </a>
+
+                <a href="{{ route('blogs.index') }}" class="hover:text-red-600">
+                    Blog
+                </a>
+            @endif
 
             @auth
                 <a href="{{ route('cart.index') }}" class="hover:text-red-600">
@@ -26,6 +40,10 @@
                     <a href="{{ route('admin.dashboard') }}"
                        class="text-red-600 font-semibold">
                         Admin
+                    </a>
+
+                    <a href="{{ route('admin.blogs.index') }}" class="hover:text-red-600">
+                        Manage Blogs
                     </a>
                 @endif
 

@@ -64,10 +64,11 @@ return [
         ],
 
         'mongodb' => [
-        'driver'   => 'mongodb',
-        'dsn'      => env('MONGODB_URI'),
-        'database' => env('MONGODB_DATABASE'),
-    ],
+            'driver'   => 'mongodb',
+            'dsn'      => env('MONGO_DB_DSN'),
+            'database' => env('MONGO_DATABASE', 'eyetec'),
+        ],
+
 
         'mariadb' => [
             'driver' => 'mariadb',
