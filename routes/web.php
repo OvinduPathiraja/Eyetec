@@ -19,6 +19,10 @@ use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 Route::get('/', [HomeController::class, 'index'])
     ->name('home');
 
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
 Route::get('/products', [ProductController::class, 'products'])
     ->name('products');
 
@@ -53,9 +57,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout/place', [CheckoutController::class, 'place'])
         ->name('checkout.place');
 
-    /*
-    |---------------- USER ORDERS ----------------
-    */
     Route::get('/my-orders', [OrderController::class, 'myOrders'])
         ->name('orders.my');
 

@@ -1,6 +1,5 @@
-@extends('layouts.admin')
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="max-w-4xl mx-auto py-10 px-4">
 
     <div class="mb-6">
@@ -10,10 +9,10 @@
 
     <div class="bg-white p-6 rounded-xl shadow">
         <form method="POST"
-              action="{{ route('admin.products.store') }}"
+              action="<?php echo e(route('admin.products.store')); ?>"
               enctype="multipart/form-data"
               class="space-y-5">
-            @csrf
+            <?php echo csrf_field(); ?>
 
             <div>
                 <label class="block text-sm font-semibold mb-1">Product Name</label>
@@ -48,7 +47,7 @@
             </div>
 
             <div class="flex justify-end gap-3 pt-4">
-                <a href="{{ route('admin.products.index') }}" class="px-4 py-2 border rounded">
+                <a href="<?php echo e(route('admin.products.index')); ?>" class="px-4 py-2 border rounded">
                     Cancel
                 </a>
                 <button class="bg-red-600 text-white px-6 py-2 rounded">
@@ -60,4 +59,6 @@
     </div>
 
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\OvinduPathirajaBISTE\Downloads\New folder (9)\eyetec\resources\views/admin/add-product.blade.php ENDPATH**/ ?>

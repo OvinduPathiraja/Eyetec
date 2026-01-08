@@ -11,9 +11,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // Featured products (latest 6)
+        // Featured products (latest 4)
         $featuredProducts = Product::latest()
-            ->take(6)
+            ->take(4)
             ->get();
 
         return view('welcome', compact('featuredProducts'));
