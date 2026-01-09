@@ -7,6 +7,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -17,23 +18,28 @@ jobs:
           port: 22
           script: |
             set -euo pipefail
+
             APP_DIR="/var/www/Eyetec"
-
             cd "$APP_DIR"
-
-            echo "== Who am I =="
-            whoami
-            id || true
 
             echo "== Git sync =="
             git config --global --add safe.directory "$APP_DIR" || true
             git fetch --all --prune
             git reset --hard origin/main
 
-            echo "== Clean vendor/node =="
-            rm -rf vendor node_modules
+            echo "== Fix perms before artisan (logs/cache) =="
+            sudo chown -R www-data:www-data storage bootstrap/cache
+            sudo find storage bootstrap/cache -type d -exec chmod 775 {} \;
+            sudo find storage bootstrap/cache -type f -exec chmod 664 {} \;
+
+            # Ensure log file writable
+            sudo rm -f storage/logs/laravel.log || true
+            sudo -u www-data touch storage/logs/laravel.log
+            sudo chmod 664 storage/logs/laravel.log
 
             echo "== PHP deps =="
+            # Clean vendor if you keep getting permission conflicts
+            sudo rm -rf vendor
             composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
 
             echo "== Node build (Vite) =="
@@ -41,20 +47,19 @@ jobs:
             npm run build
             rm -f public/hot
 
-            echo "== Laravel caches =="
+            echo "== Ensure build readable by nginx =="
+            sudo find public/build -type d -exec chmod 755 {} \;
+            sudo find public/build -type f -exec chmod 644 {} \;
+
+            echo "== Laravel caches (important order) =="
+            # clear config first so it reads updated .env (CACHE_STORE=file, DB creds)
+            php artisan config:clear
+            php artisan cache:clear --store=file || true
             php artisan optimize:clear
+
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
-
-            echo "== Permissions (runtime-only) =="
-            sudo chown -R www-data:www-data storage/framework storage/logs bootstrap/cache
-            sudo find storage/framework storage/logs bootstrap/cache -type d -exec chmod 775 {} \;
-            sudo find storage/framework storage/logs bootstrap/cache -type f -exec chmod 664 {} \;
-
-            # public/build is static - readable is enough
-            sudo find public/build -type d -exec chmod 755 {} \;
-            sudo find public/build -type f -exec chmod 644 {} \;
 
             echo "== Reload services =="
             sudo systemctl reload php8.2-fpm
