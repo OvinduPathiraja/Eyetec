@@ -2,16 +2,12 @@ name: Deploy
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Sanity check key exists
-        run: | 
-         echo "Key length:" $(echo "${{ secrets.DEPLOY_KEY }}" | wc -c)
-
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -20,8 +16,35 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           port: 22
           script: |
+            set -e
             cd /var/www/Eyetec
-            git pull origin main
-            php artisan config:clear
-            php artisan cache:clear
-            sudo systemctl reload nginx
+
+            # Make sure correct branch
+            git fetch --all
+            git reset --hard origin/main
+
+            # PHP deps
+            composer install --no-dev --prefer-dist --optimize-autoloader
+
+            # Node build (Vite)
+            npm ci
+            npm run build
+
+            # Stop Vite hot mode in production
+            rm -f public/hot
+
+            # Laravel caches
+            php artisan optimize:clear
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+
+            # Permissions (important)
+            chown -R www-data:www-data storage bootstrap/cache public/build
+            find storage bootstrap/cache -type d -exec chmod 775 {} \;
+            find storage bootstrap/cache -type f -exec chmod 664 {} \;
+            find public/build -type d -exec chmod 755 {} \;
+            find public/build -type f -exec chmod 644 {} \;
+
+            systemctl reload php8.2-fpm
+            systemctl reload nginx
