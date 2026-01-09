@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
+
+class OrderController extends Controller
+{
+    public function myOrders()
+    {
+        $orders = Order::where('user_id', Auth::id())
+            ->with('items.product')
+            ->latest()
+            ->get();
+
+        return view('orders.my-orders', compact('orders'));
+    }
+}
