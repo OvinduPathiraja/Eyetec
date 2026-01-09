@@ -1,9 +1,18 @@
-<x-guest-layout>
+<?php if (isset($component)) { $__componentOriginal69dc84650370d1d4dc1b42d016d7226b = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal69dc84650370d1d4dc1b42d016d7226b = $attributes; } ?>
+<?php $component = App\View\Components\GuestLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('guest-layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\GuestLayout::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
     <main class="min-h-screen bg-gray-100">
         <!-- Hero Section -->
         <section class="relative h-72 md:h-96 flex items-center justify-center" style="background-color: #151c28;">
             <!-- Banner Image Overlay -->
-            <img src="{{ asset('images/images/banner2.webp') }}" alt="Banner" class="absolute inset-0 w-full h-full object-cover opacity-70 z-0" style="pointer-events: none;" />
+            <img src="<?php echo e(asset('images/images/banner2.webp')); ?>" alt="Banner" class="absolute inset-0 w-full h-full object-cover opacity-70 z-0" style="pointer-events: none;" />
             <div class="relative w-full h-full flex flex-col items-center justify-center text-center z-10">
                 <h1 class="text-3xl md:text-5xl font-bold mb-2 text-white font-montserrat text-center">
                     About <span class="text-red-600">Eye - Tec</span> Computers
@@ -38,28 +47,28 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
                         <div class="bg-red-600 rounded-full flex items-center justify-center h-16 w-16 mb-5">
-                            <img src="{{ asset('images/icons/customerr.webp') }}" alt="Customer First" class="h-8 w-8">
+                            <img src="<?php echo e(asset('images/icons/customerr.webp')); ?>" alt="Customer First" class="h-8 w-8">
                         </div>
                         <h3 class="font-bold text-lg mb-2 text-gray-900 text-center" style="font-family: 'Poppins', sans-serif;">Customer First</h3>
                         <p class="text-gray-600 text-sm text-center">Your satisfaction is our priority. We listen, respond, and deliver solutions that enhance your experience.</p>
                     </div>
                     <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
                         <div class="bg-red-600 rounded-full flex items-center justify-center h-16 w-16 mb-5">
-                            <img src="{{ asset('images/icons/tech.webp') }}" alt="Cutting-Edge Tech" class="h-8 w-8">
+                            <img src="<?php echo e(asset('images/icons/tech.webp')); ?>" alt="Cutting-Edge Tech" class="h-8 w-8">
                         </div>
                         <h3 class="font-bold text-lg mb-2 text-gray-900 text-center" style="font-family: 'Poppins', sans-serif;">Cutting-Edge Tech</h3>
                         <p class="text-gray-600 text-sm text-center">We bring you the latest innovations in computers and accessories, always ahead of the curve.</p>
                     </div>
                     <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
                         <div class="bg-red-600 rounded-full flex items-center justify-center h-16 w-16 mb-5">
-                            <img src="{{ asset('images/icons/dollarr.webp') }}" alt="Affordable Prices" class="h-8 w-8">
+                            <img src="<?php echo e(asset('images/icons/dollarr.webp')); ?>" alt="Affordable Prices" class="h-8 w-8">
                         </div>
                         <h3 class="font-bold text-lg mb-2 text-gray-900 text-center" style="font-family: 'Poppins', sans-serif;">Affordable Prices</h3>
                         <p class="text-gray-600 text-sm text-center">Quality technology at prices everyone can afford. We believe in value without compromise.</p>
                     </div>
                     <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
                         <div class="bg-red-600 rounded-full flex items-center justify-center h-16 w-16 mb-5">
-                            <img src="{{ asset('images/icons/support.webp') }}" alt="Reliable Support" class="h-8 w-8">
+                            <img src="<?php echo e(asset('images/icons/support.webp')); ?>" alt="Reliable Support" class="h-8 w-8">
                         </div>
                         <h3 class="font-bold text-lg mb-2 text-gray-900 text-center" style="font-family: 'Poppins', sans-serif;">Reliable Support</h3>
                         <p class="text-gray-600 text-sm text-center">Our expert team provides ongoing support and guidance, ensuring you get the most from your technology.</p>
@@ -77,16 +86,25 @@
                 </div>
                 <p class="text-gray-700 text-center mb-8">At Eyetec Computers, we partner with leading global brands to bring you authentic, high-performance products you can trust.</p>
                 <div class="flex flex-wrap justify-center items-center gap-8">
-                    <img src="{{ asset('images/icons/intel.webp') }}" alt="Intel" class="h-20 w-auto">
-                    <img src="{{ asset('images/icons/hp.webp') }}" alt="AMD" class="h-20 w-auto">
-                    <img src="{{ asset('images/icons/nvidia.webp') }}" alt="Nvidia" class="h-20 w-auto">
-                    <img src="{{ asset('images/icons/msi.webp') }}" alt="MSI" class="h-20 w-auto">
-                    <img src="{{ asset('images/icons/asus.webp') }}" alt="ASUS" class="h-20 w-auto">
-                    <img src="{{ asset('images/icons/gigabyte.png') }}" alt="Gigabyte" class="h-20 w-auto">
-                    <img src="{{ asset('images/icons/dell.webp') }}" alt="Kingston" class="h-20 w-auto">
-                    <img src="{{ asset('images/icons/samsung.webp') }}" alt="Samsung" class="h-20 w-auto">
+                    <img src="<?php echo e(asset('images/icons/intel.webp')); ?>" alt="Intel" class="h-20 w-auto">
+                    <img src="<?php echo e(asset('images/icons/hp.webp')); ?>" alt="AMD" class="h-20 w-auto">
+                    <img src="<?php echo e(asset('images/icons/nvidia.webp')); ?>" alt="Nvidia" class="h-20 w-auto">
+                    <img src="<?php echo e(asset('images/icons/msi.webp')); ?>" alt="MSI" class="h-20 w-auto">
+                    <img src="<?php echo e(asset('images/icons/asus.webp')); ?>" alt="ASUS" class="h-20 w-auto">
+                    <img src="<?php echo e(asset('images/icons/gigabyte.png')); ?>" alt="Gigabyte" class="h-20 w-auto">
+                    <img src="<?php echo e(asset('images/icons/dell.webp')); ?>" alt="Kingston" class="h-20 w-auto">
+                    <img src="<?php echo e(asset('images/icons/samsung.webp')); ?>" alt="Samsung" class="h-20 w-auto">
                 </div>
             </div>
         </section>
     </main>
-</x-guest-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal69dc84650370d1d4dc1b42d016d7226b)): ?>
+<?php $attributes = $__attributesOriginal69dc84650370d1d4dc1b42d016d7226b; ?>
+<?php unset($__attributesOriginal69dc84650370d1d4dc1b42d016d7226b); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal69dc84650370d1d4dc1b42d016d7226b)): ?>
+<?php $component = $__componentOriginal69dc84650370d1d4dc1b42d016d7226b; ?>
+<?php unset($__componentOriginal69dc84650370d1d4dc1b42d016d7226b); ?>
+<?php endif; ?><?php /**PATH C:\eyetec-new\eyetec\resources\views/about.blade.php ENDPATH**/ ?>

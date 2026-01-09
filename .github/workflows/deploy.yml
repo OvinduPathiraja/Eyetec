@@ -1,27 +1,49 @@
-name: Deploy
+name: Deploy to Production
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Sanity check key exists
-        run: | 
-         echo "Key length:" $(echo "${{ secrets.DEPLOY_KEY }}" | wc -c)
 
-      - name: Deploy via SSH
+    steps:
+      - name: SSH Deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_KEY }}
-          port: 22
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
           script: |
+            set -e
             cd /var/www/Eyetec
-            git pull origin main
-            php artisan config:clear
-            php artisan cache:clear
+
+            # pull latest
+            git fetch --all
+            git reset --hard origin/main
+
+            # install backend deps
+            composer install --no-dev --optimize-autoloader
+
+            # build frontend
+            npm ci
+            npm run build
+
+            # laravel caches
+            php artisan optimize:clear
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+
+            # migrations
+            php artisan migrate --force
+
+            # permissions for runtime folders
+            sudo chown -R www-data:www-data storage bootstrap/cache
+            sudo chmod -R 775 storage bootstrap/cache
+
+            # reload services
+            sudo systemctl restart php8.2-fpm
             sudo systemctl reload nginx

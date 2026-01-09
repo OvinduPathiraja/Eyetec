@@ -28,7 +28,7 @@
             </a>
 
             <a href="<?php echo e(route('about')); ?>" class="hover:text-red-600 font-bold">
-                About
+                About Us
             </a>
             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
         </div>
@@ -68,7 +68,7 @@
             </form>
             <?php else: ?>
             <a href="<?php echo e(route('login')); ?>" class="hover:text-red-600">
-                Loginnn
+                Login
             </a>
 
             <a href="<?php echo e(route('register')); ?>"

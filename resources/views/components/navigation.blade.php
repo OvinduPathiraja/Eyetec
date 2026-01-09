@@ -28,7 +28,7 @@
             </a>
 
             <a href="{{ route('about') }}" class="hover:text-red-600 font-bold">
-                About
+                About Us
             </a>
             @endif
         </div>
@@ -68,7 +68,7 @@
             </form>
             @else
             <a href="{{ route('login') }}" class="hover:text-red-600">
-                Loginnn
+                Login
             </a>
 
             <a href="{{ route('register') }}"
