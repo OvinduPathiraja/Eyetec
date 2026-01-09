@@ -25,6 +25,11 @@
             Manage Orders
         </a>
 
+        <a href="{{ route('admin.blogs.index') }}"
+           class="block px-3 py-2 rounded hover:bg-gray-100">
+            Manage Blogs
+        </a>
+
     </nav>
 
     <div class="mt-auto px-4 py-6">

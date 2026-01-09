@@ -1,4 +1,6 @@
-<x-app-layout>
+@extends('layouts.admin')
+
+@section('content')
 <div class="max-w-4xl mx-auto py-10">
 
 <form method="POST"
@@ -41,4 +43,4 @@ Save
 </form>
 
 </div>
-</x-app-layout>
+@endsection
