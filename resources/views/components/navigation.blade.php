@@ -68,7 +68,7 @@
             </form>
             @else
             <a href="{{ route('login') }}" class="hover:text-red-600">
-                Login
+                Loginnnn
             </a>
 
             <a href="{{ route('register') }}"
