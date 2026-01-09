@@ -12,7 +12,7 @@
                 <div class="max-w-2xl mx-auto text-center">
                     <p class="text-sm uppercase tracking-[0.2em] text-rose-200">EyeTec Computers</p>
                     <h1 class="mt-4 text-4xl md:text-5xl font-extrabold leading-tight">
-                        Welcome to <span class="text-rose-300">EyeTec Computers 12</span>
+                        Welcome to <span class="text-rose-300">EyeTec Computers</span>
                     </h1>
                     <p class="mt-4 text-lg text-slate-200">
                         Enhance your setup with premium accessories, quick delivery, and unbeatable value.
