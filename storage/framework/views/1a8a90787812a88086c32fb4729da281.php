@@ -68,7 +68,7 @@
             </form>
             <?php else: ?>
             <a href="<?php echo e(route('login')); ?>" class="hover:text-red-600">
-                Login
+                Loginnn
             </a>
 
             <a href="<?php echo e(route('register')); ?>"
