@@ -7,7 +7,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -18,20 +17,16 @@ jobs:
           port: 22
           script: |
             set -euo pipefail
-
             APP_DIR="/var/www/Eyetec"
             cd "$APP_DIR"
-
-            echo "== Who am I =="
-            whoami
-            id || true
 
             echo "== Git sync =="
             git config --global --add safe.directory "$APP_DIR" || true
             git fetch --all --prune
             git reset --hard origin/main
 
-            echo "== PHP deps =="
+            echo "== PHP deps (clean) =="
+            rm -rf vendor
             composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
 
             echo "== Node build (Vite) =="
@@ -39,13 +34,13 @@ jobs:
             npm run build
             rm -f public/hot
 
-            echo "== Laravel cache rebuild =="
+            echo "== Laravel caches =="
             php artisan optimize:clear
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
 
-            echo "== Permissions (ONLY runtime dirs) =="
+            echo "== Permissions (runtime-only) =="
             sudo chown -R www-data:www-data storage/framework storage/logs bootstrap/cache
             sudo find storage/framework storage/logs bootstrap/cache -type d -exec chmod 775 {} \;
             sudo find storage/framework storage/logs bootstrap/cache -type f -exec chmod 664 {} \;
@@ -56,5 +51,3 @@ jobs:
             echo "== Reload services =="
             sudo systemctl reload php8.2-fpm
             sudo systemctl reload nginx
-
-            echo "== Done =="
